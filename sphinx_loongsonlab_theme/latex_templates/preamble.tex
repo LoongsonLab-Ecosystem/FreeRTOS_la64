@@ -1,0 +1,179 @@
+%%
+%%
+%% Start of EVAS pdf style preamble configuration (preamble.tex)
+%%
+%%
+\usepackage{docinfo}
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{2}
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{graphicx}
+%%% reduce spaces for Table of contents, figures and tables
+%%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
+\usepackage[notlot,nottoc,notlof]{}
+
+% Optimize the display effect
+\usepackage[verbose=silent]{microtype}
+
+\usepackage{silence}
+\WarningsOff[everypage]
+
+% Set all the text contents align to left
+\usepackage{ragged2e}  
+\setlength{\RaggedRightRightskip}{0pt plus 3em}
+\RaggedRight
+
+\usepackage{color}
+\usepackage{eso-pic}
+
+%% spacing between line
+\usepackage{setspace}
+\setstretch{1.2}
+% \singlespacing
+
+%% table line space
+\renewcommand{\arraystretch}{1.5}
+
+\definecolor{myblue}{RGB}{47, 85, 151}
+\definecolor{myred}{RGB}{255, 10, 10}
+\definecolor{mygray}{RGB}{127, 127, 127}
+% \definecolor{myblack}{RGB}{30, 20, 20}
+\definecolor{myblack}{RGB}{64, 64, 64}
+
+%%%%%%%%%%% datetime
+\usepackage{datetime}
+
+\newdateformat{MonthYearFormat}{%
+    \monthname[\THEMONTH], \THEYEAR}
+
+
+%% RO, LE will not work for 'oneside' layout.
+%% Change oneside to twoside in document class
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+
+% Set chapter text with number
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+% Header and footer
+\makeatletter
+\def\@dotsep{2}
+\fancypagestyle{normal}{
+    \fancyhf{}
+    \fancyhead[L]{\@title}
+    \fancyhead[R]{\ifnum\thechapter=0 \leftmark \else \thechapter.\leftmark \fi}
+    \fancyfoot[L]{\@author}
+    \fancyfoot[C]{\thepage}
+    \fancyfoot[R]{\version}
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.4pt}
+}
+\makeatother
+
+% remove visible space and other symbols in line break
+\makeatletter
+\def\spx@verbatim@space {%
+     \nobreak\hskip\z@skip
+     \discretionary{}{}{\kern\fontdimen2\font}%
+}%
+\makeatother
+
+% Set the header and footer divider thickness
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% Set Margins
+\setlength{\headheight}{12.12004pt}
+\setlength{\headsep}{10mm}
+\addtolength{\topmargin}{-0.12004pt}
+
+% Define a spacing for section, subsection and subsubsection
+% http://tex.stackexchange.com/questions/108684/spacing-before-and-after-section-titles
+
+\titlespacing*{\chapter}{0pt}{-30pt plus 0pt minus 0pt}{6pt plus 0pt minus 0pt}
+\titlespacing*{\section}{0pt}{6pt plus 0pt minus 0pt}{6pt plus 0pt minus 0pt}
+\titlespacing*{\subsection}{0pt}{6pt plus 0pt minus 0pt}{6pt plus 0pt minus 0pt}
+\titlespacing*{\subsubsection}{0pt}{6pt plus 0pt minus 0pt}{6pt plus 0pt minus 0pt}
+\titlespacing*{\paragraph}{0pt}{0pt plus 0pt minus 0pt}{0pt plus 0pt minus 0pt}
+\titlespacing*{\subparagraph}{0pt}{0pt plus 0pt minus 0pt}{0pt plus 0pt minus 0pt}
+
+% Define the colors of Hyperlinks
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	filecolor=blue,
+	urlcolor=blue,
+	citecolor=black,
+}
+
+% Define some content name to chinese
+\addto\captionsenglish{
+    \renewcommand{\contentsname}{目录}
+    \renewcommand{\listfigurename}{插图目录}
+    \renewcommand{\listtablename}{表格目录}
+    \renewcommand{\refname}{参考文献}
+    \renewcommand{\abstractname}{摘要}
+    \renewcommand{\indexname}{索引}
+    \renewcommand{\tablename}{表}
+    \renewcommand{\figurename}{图}
+}
+
+
+%%%
+%%% Watermark setting
+%%%
+
+\usepackage{background}
+\SetBgContents{
+    \begin{tabular}{c}
+        \hspace{-5cm}	\watermarktext \\
+        \vspace{6cm}                  \\
+        \hspace{10cm}	\watermarktext   \\
+        \vspace{6cm}                  \\
+        \hspace{-10cm}	\watermarktext
+        \vspace{6cm}                  \\
+        \hspace{15cm}	\watermarktext
+    \end{tabular}\hfill}
+\SetBgScale{1}
+\SetBgAngle{45}
+
+% reduce spacing for itemize
+\usepackage{enumitem}
+\setlist{nosep}
+
+% Quote Styles
+\AtBeginEnvironment{quote}{\slshape\par\singlespacing}
+
+% space between digit and title
+\usepackage{titlesec}
+\titleformat{\chapter}
+{\normalcolor\LARGE\bfseries}{\thechapter.}{0.2em}{}
+
+\titleformat{\section}
+{\normalcolor\LARGE\bfseries}{\thesection.}{0.2em}{}
+
+\titleformat{\subsection}
+{\normalcolor\Large\bfseries}{\thesubsection.}{0.2em}{}
+
+\titleformat{\subsubsection}
+{\normalcolor\large\bfseries}{\thesubsubsection.}{0.2em}{}
+
+\titleformat{\paragraph}
+{\normalcolor\large\bfseries}{\theparagraph}{1em}{}
+
+\titleformat{\subparagraph}
+{\normalcolor\normalsize\bfseries}{\thesubparagraph}{1em}{}
+
+\titleformat{\subsubparagraph}
+{\normalcolor\normalsize\bfseries}{\thesubsubparagraph}{1em}{}
+
+\assignpagestyle{\chapter}{normal}
+
+%%
+%%
+%% End of EVAS pdf style preamble configuration  (preamble.tex)
+%%
+%%
