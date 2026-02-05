@@ -65,7 +65,7 @@ FreeRTOS_loongArch/
 
 ## port.c
 ### 初始化任务栈
-```
+```c
 StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters )
 {
     uint64_t ullStackTop = ( uint64_t ) pxTopOfStack;
@@ -96,7 +96,7 @@ StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t px
 对传入的pxTopOfStack进行16字节对齐，预留出32个通用寄存器+ERA寄存器（存跳转的地址）和PRMD寄存器（设置优先级），将预留了上下文的栈顶地址传回。
   
 ### 启动调度器 
-```
+```c
 BaseType_t xPortStartScheduler( void )
 {
     uxCriticalNesting = 0;
@@ -114,7 +114,7 @@ void vPortEndScheduler( void )
 }
 ```
 配置硬件定时器中断
-```
+```c
 void vPortSetupTimerInterrupt( void )
 {
     unsigned long ulConstFreq = configCPU_CLOCK_HZ; 
@@ -132,7 +132,7 @@ void vPortSetupTimerInterrupt( void )
 在启动前，将嵌套计数清零，防止死锁，配置硬件定时中断，配置时间中断配置寄存器TCFG，以及例外配置寄存器ECFG,最后启动第一个任务。
 
 ### 临界区管理
-```
+```c
 void vPortEnterCritical( void )
 {
     portDISABLE_INTERRUPTS();
@@ -328,7 +328,7 @@ handle_tick:
 
 
 ## 以app/simple_main.c为例介绍FreeRTOS运行过程
-```
+```c
 int main(void) {
 
     uart_init();
@@ -382,7 +382,7 @@ b. 添加任务到就序列表prvAddNewTaskToReadyList：如果当前的tcb为NU
     xTaskGenericNotify( ( xTaskToNotify ), ( tskDEFAULT_INDEX_TO_NOTIFY ), ( ulValue ), ( eAction ), NULL )
 #define ulTaskNotifyTake( xClearCountOnExit, xTicksToWait ) \
     ulTaskGenericNotifyTake( ( tskDEFAULT_INDEX_TO_NOTIFY ), ( xClearCountOnExit ), ( xTicksToWait ) )
-```
+```c
 BaseType_t xTaskGenericNotify( TaskHandle_t xTaskToNotify,
                                UBaseType_t uxIndexToNotify,
                                uint32_t ulValue,
@@ -413,7 +413,7 @@ eAction参数说明：
   - 覆盖。无论如何，不管通知状态是否为“pending”，通知值 = `ulValue`。
 :::
 
-```
+```c
 uint32_t ulTaskGenericNotifyTake( UBaseType_t uxIndexToWaitOn,
                                   BaseType_t xClearCountOnExit,
                                   TickType_t xTicksToWait )
@@ -422,7 +422,7 @@ uxIndexToWaitOn：要等待的通知索引
 xClearCountOnExit：退出时如何处理计数值  
 xTicksToWait：最大等待时间  
 ### 测试代码
-```
+```c
 xTaskCreate(vTaskReceiver, "Receiver", 1024, NULL, 4, &xReceiverTaskHandle);
 xTaskCreate(vTaskSender,   "Sender",   1024, NULL, 3, NULL);
 
