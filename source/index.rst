@@ -6,5 +6,4 @@
    :glob:
    :numbered:
 
-   README
-   myst_markdown
+   FreeRTOS
