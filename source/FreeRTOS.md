@@ -778,8 +778,9 @@ void (*suicide_func)(void);
 ```
 0x9000000000200211:  64001502   bge      	r8, r2, 20 # 0x9000000000200225
 ```
-最后255触发ade进入死循环。
-##3.8更新
-###任务切换过程
-第一种情况：任务主动让出cpu，比如vTaskDelay()，函数内部会调用函数，将当前任务放入延时链表，然后调用portYIELD()，也就是syscall 0，此时内核陷入到之前的freertos_loongarch_trap_handler异常处理入口，通过检查ESTAT寄存器，进入handle_yield，然后跳转到vTaskSwitchContext，这里调度器会选择优先级最高的任务将pxCurrentTCB指向这个任务，最后恢复上下文，就会读出设置好的任务的地址，然后跳转实现任务切换。
-第二种情况：定时器中断，当硬件定时器倒计时归零，向 CPU 发出中断信号，正常运行的任务瞬间被打断，进入freertos_loongarch_trap_handler异常处理入口，同样的，通过检查ESTAT寄存器，进入handle_tick，跳转到xTaskIncrementTick，接下来会1. 把全局系统节拍计数器 xTickCount 加 1。2. 检查 pxDelayedTaskList（延时链表），看有没有任务设定的闹钟到期了。如果有，把它从延时链表拔出来，插回 pxReadyTasksLists（就绪链表）。3. 如果刚刚被唤醒的任务，优先级大于或等于当前正在运行的任务（或者启用了同优先级时间片轮转），这个函数就会返回 pdTRUE（非 0 值，在 LoongArch 中存放在 $r4 寄存器里）,否则返回pdfalse，继续刚才的任务。
+最后255触发ade进入死循环。  
+## 3.8更新  
+### 任务切换过程  
+第一种情况：任务主动让出cpu，比如vTaskDelay()，函数内部会调用函数，将当前任务放入延时链表，然后调用portYIELD()，也就是syscall 0，此时内核陷入到之前的freertos_loongarch_trap_handler异常处理入口，通过检查ESTAT寄存器，进入handle_yield，然后跳转到vTaskSwitchContext，这里调度器会选择优先级最高的任务将pxCurrentTCB指向这个任务，最后恢复上下文，就会读出设置好的任务的地址，然后跳转实现任务切换。  
+第二种情况：定时器中断，当硬件定时器倒计时归零，向 CPU 发出中断信号，正常运行的任务瞬间被打断，进入freertos_loongarch_trap_handler异常处理入口，同样的，通过检查ESTAT寄存器，进入handle_tick，跳转到xTaskIncrementTick，接下来会1. 把全局系统节拍计数器 xTickCount 加 1。2. 检查 pxDelayedTaskList（延时链表），看有没有任务设定的闹钟到期了。如果有，把它从延时链表拔出来，插回 pxReadyTasksLists（就绪链表）。3. 如果刚刚被唤醒的任务，优先级大于或等于当前正在运行的任务（或者启用了同优先级时间片轮转），这个函数就会返回 pdTRUE（非 0 值，在 LoongArch 中存放在 $r4 寄存器里）,否则返回pdfalse，继续刚才的任务。  
+  
